@@ -2,6 +2,9 @@ import React, {FC, useState} from 'react';
 import NewComponent from "./NewComponent";
 import Button from "./Button";
 import NewComponent2 from "./NewComponent2";
+import FullInput from "./FullInput/FullInput";
+import OnlyButton from "./OnlyButton/OnlyButton";
+import {Input} from "./Input/Input";
 
 type MainProps = {
     content: string
@@ -19,6 +22,13 @@ let students: Array<StudentType> = [
     {name: 'Vika', age: 32, city: 'London'},
 ]
 const Main: FC<MainProps> = ({content}) => {
+
+    const [textForInput, setTextForInput] = useState('')
+    const [messages, setMessages] = useState([
+        {message: 'message1'},
+        {message: 'message2'},
+        {message: 'message3'}
+    ])
     const [count, setCount] = useState(0)
 
     const [money, setMoney] = useState([
@@ -33,6 +43,16 @@ const Main: FC<MainProps> = ({content}) => {
     ])
     const [curentMoney, setCurentMoney] = useState(money)
 
+    // function addMessage(newMessage: string) {
+    //     setMessages([{message: newMessage},...messages])
+    // }
+    function addMessage() {
+        setMessages([{message: textForInput},...messages])
+        setTextForInput('')
+    }
+    const changeInput = (text: string) => {
+        setTextForInput(text)
+    }
     function onFilterMoney(banknots: 'rubls' | 'dollars' | 'all')  {
         if (banknots === 'rubls') {
             setCurentMoney(money.filter(e => e.banknots.toLowerCase() === banknots))
@@ -43,7 +63,6 @@ const Main: FC<MainProps> = ({content}) => {
         }
 
     }
-
 
     function onClick1() {
         console.log(100200)
@@ -61,6 +80,14 @@ const Main: FC<MainProps> = ({content}) => {
                 <button onClick={() => setCount(0)}>0</button>
                 <Button title={'Button first'} callback={onClick1}/>
                 <Button title={'Button second'} callback={() => onClick12(455)}/>
+            </div>
+            <div>
+                {/*<FullInput addMessage={addMessage} />*/}
+                <Input textForInput={textForInput} changeInput={changeInput}/>
+                <OnlyButton name={'+'} addMessage={addMessage}/>
+                <div>
+                    {messages.map((m,i) => <div key={i}>{m.message}</div>)}
+                </div>
             </div>
         </div>
     );
